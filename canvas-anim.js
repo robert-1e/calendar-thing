@@ -2,6 +2,8 @@ const canvas = document.getElementById("background-anim");
 
 const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
+const aVariableICbaToName = 100;
+
 function sumSine(x, y, xArr, yArr, time, scale = 1 / 150) {
     let total = 0;
 
@@ -16,8 +18,8 @@ function sumSine(x, y, xArr, yArr, time, scale = 1 / 150) {
     return total;
 }
 
-const xArr = [Math.random(), Math.random(), Math.random(), Math.random()];
-const yArr = [Math.random(), Math.random(), Math.random(), Math.random()];
+const yArr = [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()];
+const xArr = [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()];
 
 let prevTime = 0;
 let deltaTime = 0;
@@ -29,7 +31,7 @@ function animate(currTime) {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = "#ff0000";
+    ctx.fillStyle = "#ff00ff";
 
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -37,12 +39,21 @@ function animate(currTime) {
     const data = new Uint8Array(image.data.buffer);
 
     for (let i = 3; i < data.length; i += 4) {
-        let x = i % (canvas.width * 4);
-        let y = Math.floor(i / (canvas.height * 4));
+        let x = (i % (canvas.width * 4)) * aVariableICbaToName;
+        let y = Math.floor(i / (canvas.height * 4)) * aVariableICbaToName;
 
         let sineSum = sumSine(x, y, xArr, yArr, currTime / 100);
+        let v = sineSum * sineSum * 6;
 
-        data[i] = (Math.sin(sineSum * sineSum * 3) + 1) * 125;
+        if (v < 255) {
+            data[i - 3] = v;
+        } else if (255 < v) {
+            data[i - 1] = 510 - v;
+        } else {
+            // this hopefully wont happen, if it does then call it a feature
+        }
+
+        // data[i] = v;
     }
 
     ctx.putImageData(image, 0, 0);
