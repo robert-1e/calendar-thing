@@ -5,5 +5,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Login</title>
     </head>
-    <body></body>
+    <body>
+        <div>
+            <div>
+                <h1>Login</h1>
+            </div>
+            <form action="POST">
+                <div>
+                    <input
+                        required
+                        type="text"
+                        name="account-name"
+                        id="account-name-input"
+                        placeholder="Name" />
+                </div>
+
+                <div>
+                    <input
+                        required
+                        type="password"
+                        name="password"
+                        id="password-input"
+                        placeholder="Password" />
+                </div>
+
+                <button type="submit">Signup</button>
+
+                <p>New here? <a href="/signup">Create an account</a></p>
+            </form>
+        </div>
+    </body>
 </html>
