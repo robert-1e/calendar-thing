@@ -1,16 +1,16 @@
 @font-face {
     font-family: "m-plus-rounded-1c-extrabold";
-    src: url(./M_PLUS_Rounded_1c/MPLUSRounded1c-ExtraBold.ttf);
+    src: url(./M_PLUS_Rounded_1c/MPLUSRounded1c-ExtraBold.woff);
 }
 @font-face {
     font-family: "m-plus-rounded-1c-bold";
-    src: url(./M_PLUS_Rounded_1c/MPLUSRounded1c-Bold.ttf);
+    src: url(./M_PLUS_Rounded_1c/MPLUSRounded1c-Bold.woff);
 }
 @font-face {
     font-family: "m-plus-rounded-1c-medium";
-    src: url(./M_PLUS_Rounded_1c/MPLUSRounded1c-Medium.ttf);
+    src: url(./M_PLUS_Rounded_1c/MPLUSRounded1c-Medium.woff);
 }
 @font-face {
     font-family: "m-plus-rounded-1c-black";
-    src: url(./M_PLUS_Rounded_1c/MPLUSRounded1c-Black.ttf);
+    src: url(./M_PLUS_Rounded_1c/MPLUSRounded1c-Black.woff);
 }

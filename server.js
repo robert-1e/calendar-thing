@@ -1,13 +1,51 @@
-import { serveDir } from "jsr:@std/http/file-server";
+Deno.serve({
+    port: 80,
+    handler: async (request) => {
+        if (request.headers.get("upgrade") === "websocket") {
+            const { socket, response } = Deno.upgradeWebSocket(request);
 
-Deno.serve(async (req) => {
-    let path = new URL(req.url).pathname;
+            socket.onopen = () => {
+                console.log("CONNECTED");
+            };
+            socket.onmessage = (event) => {
+                console.log(`RECEIVED: ${event.data}`);
+                socket.send("pong");
+            };
+            socket.onclose = () => {
+                console.log("DISCONNECTED");
+            };
+            socket.onerror = (error) => {
+                console.error("ERROR:", error);
+            };
 
-    console.log(path);
+            return response;
+        } else {
+            const URLPath = new URL(request.url).pathname;
 
-    if (path === "/data/") {
-        return new Response(Date.now());
-    }
+            if (URLPath === "signup") {
+            }
 
-    return serveDir(req);
+            let filePath = `./web${URLPath.match(/^[^&]*/)}`; // Thank you to https://regexr.com and https://chatgpt.com for this regex
+
+            if (!filePath.endsWith("/") && !filePath.endsWith(".html")) {
+                filePath += "/";
+            }
+
+            if (!path.endsWith(".html")) {
+                filePath += "index.html";
+            }
+
+            let file;
+
+            try {
+                file = await Deno.open(filePath, { read: true });
+            } catch (error) {
+                console.log(error);
+
+                file = await Deno.open("./web/404.html", { read: true });
+            }
+
+            return new Response(file.readable);
+        }
+    },
 });
