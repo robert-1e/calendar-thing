@@ -4,20 +4,22 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Signup</title>
+
+        <script src="signup.js"></script>
     </head>
     <body>
         <div>
             <div>
                 <h1>Signup</h1>
             </div>
-            <form action="POST">
+            <form id="signup-form" action="POST">
                 <div>
                     <input
                         required
                         type="text"
-                        name="account-name"
-                        id="account-name-input"
-                        placeholder="Name" />
+                        name="username"
+                        id="username-input"
+                        placeholder="Username" />
                 </div>
 
                 <div>
@@ -41,6 +43,9 @@
 
                 <p>Already have an account? <a href="/login">Login</a></p>
             </form>
+            <div>
+                <p id="error-messages-tmp"></p>
+            </div>
         </div>
     </body>
 </html>
