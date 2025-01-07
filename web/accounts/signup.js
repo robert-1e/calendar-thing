@@ -7,7 +7,9 @@ const repPassInp = document.getElementById("repeat-password-input");
 const errorMsgP = document.getElementById("error-messages-tmp");
 
 function validateForm() {
+    // Will fix  this terrible error handling system when it all works along with the aesthetic part
     let errors = [];
+
     if (nameInp.length === 0) {
         errors.push("Enter a username");
     } else if (nameInp.value.length < 5) {
