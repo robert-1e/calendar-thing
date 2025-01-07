@@ -25,11 +25,11 @@ Deno.serve({
             let filePath;
 
             if (/^\/(signup|login)\/*$/.test(URLPath)) {
-                filePath = `./web/accounts${URLPath.match(/^\/(signup|login)/)}.html`;
+                filePath = `./web/accounts/${URLPath.match(/signup|login/i)}.html`;
             } else if (/^\/(signup|login)\.js$/.test(URLPath)) {
                 filePath = "./web/accounts" + URLPath;
             } else {
-                filePath = `./web${URLPath.match(/^[^&]*/)}`; // Thank you to https://regexr.com and https://chatgpt.com for this regex
+                filePath = `./web${URLPath.match(/^[^&]*/)}`;
 
                 if (!filePath.endsWith("/") && !/\.[^\/\.]+$/.test(filePath)) {
                     filePath += "/";
