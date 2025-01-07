@@ -8,7 +8,7 @@ const errorMsgP = document.getElementById("error-messages-tmp");
 
 function validateForm() {
     let errors = [];
-    if (!nameInp.value) {
+    if (nameInp.length === 0) {
         errors.push("Enter a username");
     } else if (nameInp.value.length < 5) {
         errors.push("Username must be at least 5 characters long");
