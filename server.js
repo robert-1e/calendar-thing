@@ -24,10 +24,10 @@ Deno.serve({
 
             let filePath;
 
-            if (URLPath === "/signup") {
-                filePath = "./web/accounts/signup.html";
-            } else if (URLPath === "/login") {
-                filePath = "./web/accounts/login.html";
+            if (/^\/(signup|login)\/*$/.test(URLPath)) {
+                filePath = `./web/accounts${URLPath.match(/^\/(signup|login)/)}.html`;
+            } else if (/^\/(signup|login)\.js$/.test(URLPath)) {
+                filePath = "./web/accounts" + URLPath;
             } else {
                 filePath = `./web${URLPath.match(/^[^&]*/)}`; // Thank you to https://regexr.com and https://chatgpt.com for this regex
 
