@@ -31,11 +31,11 @@ Deno.serve({
             } else {
                 filePath = `./web${URLPath.match(/^[^&]*/)}`; // Thank you to https://regexr.com and https://chatgpt.com for this regex
 
-                if (!filePath.endsWith("/") && !filePath.endsWith(".html")) {
+                if (!filePath.endsWith("/") && !filePath.test(/\.[^\/\.]+$/)) {
                     filePath += "/";
                 }
 
-                if (!filePath.endsWith(".html")) {
+                if (!filePath.test(/\.[^\/\.]+$/)) {
                     filePath += "index.html";
                 }
             }
