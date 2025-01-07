@@ -2,6 +2,9 @@ Deno.serve({
     port: 80,
     handler: async (request) => {
         if (request.headers.get("upgrade") === "websocket") {
+            // Currently just code stolen from the internets
+            // TODO: make it like actually do what it is supposed to do
+
             const { socket, response } = Deno.upgradeWebSocket(request);
 
             socket.onopen = () => {
@@ -19,6 +22,10 @@ Deno.serve({
             };
 
             return response;
+        } else if (request.method === "POST") {
+            let params = JSON.parse(request.body);
+
+            console.log(params);
         } else {
             const URLPath = new URL(request.url).pathname;
 
