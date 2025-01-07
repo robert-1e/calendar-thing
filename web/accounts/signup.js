@@ -20,10 +20,16 @@ function validateForm() {
         );
     }
 
-    if (passInp.value.length < 8) {
+    if (passInp.value.length === 0) {
+        errors.push("Enter a password");
+    } else if (passInp.value.length < 8) {
         errors.push("Password must be at least 8 characters long");
     } else if (20 < passInp.value.length) {
         errors.push("Password must be at most 20 characters long");
+    }
+
+    if (passInp.value !== repPassInp.value) {
+        errors.push("Passwords must match");
     }
 
     errorMsgP.innerHTML = errors.join("<br>");
