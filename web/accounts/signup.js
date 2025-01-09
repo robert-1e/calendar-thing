@@ -40,7 +40,15 @@ function validateForm() {
 }
 
 form.addEventListener("submit", (event) => {
-    if (!validateForm()) {
-        event.preventDefault();
+    event.preventDefault();
+
+    if (validateForm()) {
+        fetch("/signup/new-account", {
+            method: "POST",
+            body: JSON.stringify({
+                username: nameInp.value,
+                password: passInp.value,
+            }),
+        });
     }
 });

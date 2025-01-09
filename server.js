@@ -1,3 +1,5 @@
+await Deno.openKv();
+
 Deno.serve({
     port: 80,
     handler: async (request) => {
@@ -24,17 +26,28 @@ Deno.serve({
             return response;
         } else if (request.method === "POST") {
             try {
-                let body = await request.text();
+                switch (new URL(request.url).pathname) {
+                    case "/signup/new-account":
+                        try {
+                            let accInfo = JSON.parse(request.body);
 
-                console.log("body\n", body);
+                            // Validating info server-side (as well as client side)
+                            if (
+                                accInfo.username.length < 5 ||
+                                18 < accInfo.username.length ||
+                                accInfo.password.length < 8 ||
+                                20 < accInfo.password.length
+                            ) {
+                                // Invalid info (deal with it somehow)
+                            }
+                        } catch (error) {}
+                        break;
 
-                let URLParams = new URLSearchParams(body).entries();
+                    default:
+                        console.log("Unknown POST request\n", request);
 
-                console.log("URLParams\n", URLParams);
-
-                let params = new Proxy(URLParams);
-
-                console.log("params\n", params);
+                        return new Response(/* TODO: write this bit */);
+                }
             } catch (error) {
                 console.log("Invalid POST request");
             }
