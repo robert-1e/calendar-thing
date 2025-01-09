@@ -25,6 +25,8 @@ Deno.serve({
 
             return response;
         } else if (request.method === "POST") {
+            console.log(request);
+
             try {
                 switch (new URL(request.url).pathname) {
                     case "/signup/new-account":
