@@ -46,8 +46,8 @@ form.addEventListener("submit", async (event) => {
         let response = await fetch("/signup/new-account", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "X-API-key": "foobar",
+                "content-type": "application/json",
+                "x-api-key": "foobar",
             },
             body: JSON.stringify({
                 username: nameInp.value,

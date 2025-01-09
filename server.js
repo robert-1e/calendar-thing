@@ -31,7 +31,7 @@ Deno.serve({
                 switch (new URL(request.url).pathname) {
                     case "/signup/new-account":
                         try {
-                            let accInfo = JSON.parse(request.body);
+                            let accInfo = JSON.parse(await request.text());
 
                             console.log("post req worked");
 
@@ -44,7 +44,9 @@ Deno.serve({
                             ) {
                                 // Invalid info (deal with it somehow)
                             }
-                        } catch (error) {}
+                        } catch (error) {
+                            console.log("oh noes we got an error1?!/!1");
+                        }
 
                         break;
 
