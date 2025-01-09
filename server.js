@@ -28,7 +28,7 @@ Deno.serve({
 
                 console.log("POST body\n", body);
 
-                let params = JSON.parse(body);
+                let params = new Proxy(new URLSearchParams(body).entries());
 
                 console.log("POST params (parsed)\n", params);
             } catch (error) {
@@ -62,9 +62,11 @@ Deno.serve({
             try {
                 file = await Deno.open(filePath, { read: true });
             } catch (error) {
-                console.log(error);
-
                 file = await Deno.open("./web/404.html", { read: true });
+
+                if (error.name !== "NotFound") {
+                    console.log(error);
+                }
             }
 
             return new Response(file.readable);
