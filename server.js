@@ -26,11 +26,15 @@ Deno.serve({
             try {
                 let body = await request.text();
 
-                console.log("POST body\n", body);
+                console.log("body\n", body);
 
-                let params = new Proxy(new URLSearchParams(body).entries());
+                let URLParams = new URLSearchParams(body).entries();
 
-                console.log("POST params (parsed)\n", params);
+                console.log("URLParams\n", URLParams);
+
+                let params = new Proxy(URLParams);
+
+                console.log("params\n", params);
             } catch (error) {
                 console.log("Invalid POST request");
             }
