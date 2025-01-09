@@ -39,11 +39,11 @@ function validateForm() {
     return !errors.length; // Returns true if there are no errors
 }
 
-form.addEventListener("submit", (event) => {
+form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     if (validateForm()) {
-        let response = fetch("/signup/new-account", {
+        let response = await fetch("/signup/new-account", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
