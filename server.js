@@ -25,9 +25,13 @@ Deno.serve({
 
             return response;
         } else if (request.method === "POST") {
-            let params = JSON.parse(request.body);
+            try {
+                let params = JSON.parse(request.body);
 
-            console.log(params);
+                console.log(params);
+            } catch (error) {
+                console.log(error);
+            }
         } else {
             const URLPath = new URL(request.url).pathname;
 
