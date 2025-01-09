@@ -1,8 +1,6 @@
 Deno.serve({
     port: 80,
     handler: async (request) => {
-        console.log(request);
-
         if (request.headers.get("upgrade") === "websocket") {
             // Currently just code stolen from the internets
             // TODO: make it like actually do what it is supposed to do
@@ -28,9 +26,11 @@ Deno.serve({
             try {
                 let body = await request.text();
 
-                console.log();
+                console.log("POST body\n", body);
 
-                let params = JSON.parse(request.text());
+                let params = JSON.parse(body);
+
+                console.log("POST params (parsed)\n", params);
             } catch (error) {
                 console.log("Invalid POST request");
             }
