@@ -31,6 +31,8 @@ Deno.serve({
                         try {
                             let accInfo = JSON.parse(request.body);
 
+                            console.log("post req worked");
+
                             // Validating info server-side (as well as client side)
                             if (
                                 accInfo.username.length < 5 ||
@@ -41,6 +43,7 @@ Deno.serve({
                                 // Invalid info (deal with it somehow)
                             }
                         } catch (error) {}
+
                         break;
 
                     default:
