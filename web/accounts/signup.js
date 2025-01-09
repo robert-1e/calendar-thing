@@ -47,7 +47,7 @@ form.addEventListener("submit", async (event) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "confirmation-header-(debug)": "123",
+                "X-API-key": "foobar",
             },
             body: JSON.stringify({
                 username: nameInp.value,
