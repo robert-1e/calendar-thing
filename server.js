@@ -26,12 +26,16 @@ Deno.serve({
             return response;
         } else if (request.method === "POST") {
             try {
-                console.log(request.text());
+                let body = await request.text();
+
+                console.log();
 
                 let params = JSON.parse(request.text());
             } catch (error) {
                 console.log("Invalid POST request");
             }
+
+            return new Response();
         } else {
             const URLPath = new URL(request.url).pathname;
 
