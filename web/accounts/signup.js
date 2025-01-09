@@ -43,12 +43,18 @@ form.addEventListener("submit", (event) => {
     event.preventDefault();
 
     if (validateForm()) {
-        fetch("/signup/new-account", {
+        let response = fetch("/signup/new-account", {
             method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "confirmation-header-(debug)": "123",
+            },
             body: JSON.stringify({
                 username: nameInp.value,
                 password: passInp.value,
             }),
         });
+
+        console.log(response);
     }
 });
