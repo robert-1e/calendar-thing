@@ -16,7 +16,7 @@ function validateForm() {
         errors.push("Username must be at least 5 characters long");
     } else if (18 < nameInp.value.length) {
         errors.push("Username must be at most 18 characters long");
-    } else if (nameInp.value.test(/[^a-zA-Z0-9_]/)) {
+    } else if (/[^a-zA-Z0-9_]/.test(nameInp.value)) {
         errors.push(
             "Username cannot contain any fancy shmancy characters and that, stick to letters and numbers and underscores"
         );
