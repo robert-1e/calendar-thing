@@ -50,8 +50,8 @@ Deno.serve({
                                 status: 400,
                                 headers: { "content-type": "text/html" },
                             });
-                        } else if (kv.get(["userdata", accInfo.username])) {
-                            console.log(kv.get(["userdata", accInfo.username]));
+                        } else if (await kv.get(["userdata", accInfo.username])) {
+                            console.log(await kv.get(["userdata", accInfo.username]));
 
                             return new Response("username taken", {
                                 status: 400,
