@@ -1,7 +1,5 @@
 const kv = await Deno.openKv();
 
-kv.set(["userdata"], {});
-
 Deno.serve({
     port: 80,
     handler: async (request) => {
@@ -28,46 +26,49 @@ Deno.serve({
 
                 return response;
             } else if (request.method === "POST") {
-                try {
-                    switch (new URL(request.url).pathname) {
-                        case "/signup/new-account":
-                            let accInfo = JSON.parse(await request.text());
+                switch (new URL(request.url).pathname) {
+                    case "/signup/new-account":
+                        let accInfo = JSON.parse(await request.text());
 
-                            console.log(accInfo);
+                        console.log(accInfo);
 
-                            // Validating info server-side (as well as client side)
-                            if (
-                                accInfo.username.length < 5 ||
-                                18 < accInfo.username.length ||
-                                accInfo.password.length < 8 ||
-                                20 < accInfo.password.length ||
-                                /[^a-zA-Z0-9_]/.test(accInfo.username) ||
-                                /^_|_$/.test(accInfo.username)
-                            ) {
-                                // Invalid info (deal with it somehow)
-                                console.log(
-                                    "FIX ME!1!!!1\n(if this is still WIP)\n[FOR DEBUGGING PURPOSES]"
-                                );
+                        // Validating info server-side (as well as client side)
+                        if (
+                            accInfo.username.length < 5 ||
+                            18 < accInfo.username.length ||
+                            accInfo.password.length < 8 ||
+                            20 < accInfo.password.length ||
+                            /[^a-zA-Z0-9_]/.test(accInfo.username) ||
+                            /^_|_$/.test(accInfo.username)
+                        ) {
+                            // Invalid info (deal with it somehow)
+                            console.log(
+                                "FIX ME!1!!!1\n(if this is still WIP)\n[FOR DEBUGGING PURPOSES]"
+                            );
 
-                                return new Response("invalid account creation data", {
-                                    status: 400,
-                                    headers: { "content-type": "text/html" },
-                                });
-                            }
+                            return new Response("invalid account creation data", {
+                                status: 400,
+                                headers: { "content-type": "text/html" },
+                            });
+                        } else if (kv.get(["userdata", accInfo.username])) {
+                            console.log(kv.get(["userdata", accInfo.username]));
 
-                            if (kv.get(["userdata", accInfo.username])) {
-                                console.log(kv.get(["userdata", accInfo.username]));
-                            }
+                            return new Response("username taken", {
+                                status: 400,
+                                headers: { "content-type": "text/html" },
+                            });
+                        }
 
-                            break;
+                        kv.set(["userdata", accInfo.username], {
+                            password: accInfo.password,
+                        });
 
-                        default:
-                            console.log("Unknown POST request\n", request);
+                        break;
 
-                            return new Response(/* TODO: write this bit */);
-                    }
-                } catch (error) {
-                    console.log("Error in POST req handling\n", error);
+                    default:
+                        console.log("Unknown POST request\n", request);
+
+                        return new Response(/* TODO: write this bit */);
                 }
 
                 return new Response();
