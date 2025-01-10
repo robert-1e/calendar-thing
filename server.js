@@ -1,5 +1,7 @@
 const kv = await Deno.openKv();
 
+kv.set(["userdata"], {});
+
 Deno.serve({
     port: 80,
     handler: async (request) => {
@@ -26,8 +28,6 @@ Deno.serve({
 
                 return response;
             } else if (request.method === "POST") {
-                console.log(request);
-
                 try {
                     switch (new URL(request.url).pathname) {
                         case "/signup/new-account":
@@ -40,7 +40,9 @@ Deno.serve({
                                 accInfo.username.length < 5 ||
                                 18 < accInfo.username.length ||
                                 accInfo.password.length < 8 ||
-                                20 < accInfo.password.length
+                                20 < accInfo.password.length ||
+                                /[^a-zA-Z0-9_]/.test(accInfo.username) ||
+                                /^_|_$/.test(accInfo.username)
                             ) {
                                 // Invalid info (deal with it somehow)
                                 console.log(
@@ -53,7 +55,9 @@ Deno.serve({
                                 });
                             }
 
-                            kv.get([accounts]);
+                            if (kv.get(["userdata", accInfo.username])) {
+                                console.log(kv.get(["userdata", accInfo.username]));
+                            }
 
                             break;
 
@@ -63,7 +67,7 @@ Deno.serve({
                             return new Response(/* TODO: write this bit */);
                     }
                 } catch (error) {
-                    console.log("Invalid POST request");
+                    console.log("Error in POST req handling\n", error);
                 }
 
                 return new Response();

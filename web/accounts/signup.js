@@ -20,6 +20,8 @@ function validateForm() {
         errors.push(
             "Username cannot contain any fancy shmancy characters and that, stick to letters and numbers and underscores"
         );
+    } else if (/^_|_$/.test(nameInp.value)) {
+        errors.push("Username cannot begin or end with underscore");
     }
 
     if (passInp.value.length === 0) {
