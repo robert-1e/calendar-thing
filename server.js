@@ -1,7 +1,5 @@
 const kv = await Deno.openKv();
 
-await kv.delete(["userdata"]);
-
 Deno.serve({
     port: 80,
     handler: async (request) => {
