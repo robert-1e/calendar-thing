@@ -129,6 +129,7 @@ Deno.serve({
                             });
                         }
 
+                        // TODO: make this work
                         return new Response(
                             "you logged in successfully!! (login system not fully implemented yet so this means nothing)",
                             {
@@ -147,6 +148,8 @@ Deno.serve({
 
                 return new Response();
             } else {
+                console.log(request);
+
                 const URLPath = new URL(request.url).pathname;
 
                 let filePath;
