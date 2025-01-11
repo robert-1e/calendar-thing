@@ -4,37 +4,40 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Login</title>
-
-        <script src="login.js"></script>
     </head>
     <body>
         <div>
             <div>
                 <h1>Login</h1>
             </div>
-            <form action="POST">
+            <form id="login-form" method="post">
                 <div>
                     <input
-                        required
+                        aria-required="true"
                         type="text"
-                        name="account-name"
-                        id="account-name-input"
-                        placeholder="Name" />
+                        name="username"
+                        id="username-input"
+                        placeholder="Username" />
                 </div>
 
                 <div>
                     <input
-                        required
+                        aria-required="true"
                         type="password"
                         name="password"
                         id="password-input"
                         placeholder="Password" />
                 </div>
 
-                <button type="submit">Signup</button>
+                <button type="submit">Login</button>
 
                 <p>New here? <a href="/signup">Create an account</a></p>
             </form>
+            <div>
+                <p id="error-messages-tmp"></p>
+            </div>
+
+            <script defer src="./login.js"></script>
         </div>
     </body>
 </html>

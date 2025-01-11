@@ -49,7 +49,7 @@ form.addEventListener("submit", async (event) => {
             method: "POST",
             headers: {
                 "content-type": "application/json",
-                "x-api-key": "foobar",
+                "testing-api-key": "top-secret-123",
             },
             body: JSON.stringify({
                 username: nameInp.value,
@@ -57,6 +57,14 @@ form.addEventListener("submit", async (event) => {
             }),
         });
 
-        console.log(response);
+        if (response.status === 400) {
+            let body = response.text();
+
+            console.log(body);
+
+            if (body === "username taken") {
+                errorMsgP.innerHTML = "Username is taken, try another one.";
+            }
+        }
     }
 });

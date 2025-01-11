@@ -26,9 +26,48 @@ Deno.serve({
 
                 return response;
             } else if (request.method === "POST") {
+                const URLPath = new URL(request.url).pathname;
+
+                if (/^\/account\/(login|signup)$/.test(URLPath)) {
+                    let accInfo = JSON.parse(await request.text());
+
+                    let userdata = await kv.get(["userdata", accInfo.username]);
+
+                    if (
+                        accInfo.username.length < 5 ||
+                        18 < accInfo.username.length ||
+                        accInfo.password.length < 8 ||
+                        20 < accInfo.password.length ||
+                        /[^a-zA-Z0-9_]/.test(accInfo.username) ||
+                        /^_|_$/.test(accInfo.username)
+                    ) {
+                        // Invalid info
+
+                        return new Response("invalid account creation data", {
+                            status: 400,
+                            headers: { "content-type": "text/html" },
+                        });
+                    } else if (
+                        /login/.test(URLPath) &&
+                        userdata.value.password === accInfo.password
+                    ) {
+                        return new Response(JSON.stringify(), {
+                            status: 200,
+                            headers: { "content-type": "application/json" },
+                        });
+                    } else if (/signup/.test(URLPath) && userdata.value) {
+                        console.log(userdata);
+
+                        return new Response("username taken", {
+                            status: 400,
+                            headers: { "content-type": "text/html" },
+                        });
+                    }
+                }
+
                 switch (new URL(request.url).pathname) {
                     case "/signup/new-account":
-                        let accInfo = JSON.parse(await request.text());
+                        accInfo = JSON.parse(await request.text());
 
                         console.log(accInfo);
 
@@ -62,6 +101,41 @@ Deno.serve({
                         kv.set(["userdata", accInfo.username], {
                             password: accInfo.password,
                         });
+
+                        break;
+
+                    case "/login/login":
+                        accInfo = JSON.parse(await request.text());
+
+                        console.log(accInfo);
+
+                        // Validating info server-side (as well as client side)
+                        if (
+                            accInfo.username.length < 5 ||
+                            18 < accInfo.username.length ||
+                            accInfo.password.length < 8 ||
+                            20 < accInfo.password.length ||
+                            /[^a-zA-Z0-9_]/.test(accInfo.username) ||
+                            /^_|_$/.test(accInfo.username) ||
+                            !(
+                                (await kv.get(["userdata", accInfo.username])).value.password ===
+                                accInfo.password
+                            )
+                        ) {
+                            // Invalid info (deal with it somehow)
+                            return new Response("invalid account data", {
+                                status: 400,
+                                headers: { "content-type": "text/html" },
+                            });
+                        }
+
+                        return new Response(
+                            "you logged in successfully!! (login system not fully implemented yet so this means nothing)",
+                            {
+                                status: 200,
+                                headers: { "content-type": "text/html" },
+                            }
+                        );
 
                         break;
 
