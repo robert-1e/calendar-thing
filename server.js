@@ -7,7 +7,7 @@ function generateCookie() {
 const kv = await Deno.openKv();
 
 Deno.serve({
-    port: 80,
+    port: 8000,
     handler: async (request) => {
         try {
             if (request.headers.get("upgrade") === "websocket") {
@@ -34,10 +34,12 @@ Deno.serve({
             } else if (request.method === "POST") {
                 const URLPath = new URL(request.url).pathname;
 
-                if (/^\/account\/(login|signup)$/.test(URLPath)) {
-                    let accInfo = JSON.parse(await request.text());
+                let accInfo, userdata;
 
-                    let userdata = await kv.get(["userdata", accInfo.username]);
+                if (/^\/account\/(login|signup)$/.test(URLPath)) {
+                    accInfo = JSON.parse(await request.text());
+
+                    userdata = await kv.get(["userdata", accInfo.username]);
 
                     if (
                         accInfo.username.length < 5 ||
@@ -113,7 +115,7 @@ Deno.serve({
                         break;
 
                     case "/login/login":
-                        let accInfo = JSON.parse(await request.text());
+                        accInfo = JSON.parse(await request.text());
 
                         console.log(accInfo);
 
