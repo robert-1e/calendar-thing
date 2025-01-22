@@ -4,7 +4,9 @@ function generateCookie() {
     return randomBytes(32).toString("hex");
 }
 
-const kv = await Deno.openKv();
+const kv = await Deno.openKv(
+    "https://api.deno.com/databases/ba2ab28b-6505-49c0-bd37-99e0aa074468/connect"
+);
 
 Deno.serve({
     port: 8000,
@@ -70,17 +72,26 @@ Deno.serve({
                             status: 200,
                             headers: { "content-type": "application/json" },
                         });
-                    } else if (/signup/.test(URLPath) && userdata.value) {
-                        console.log(userdata);
+                    } else if (/signup/.test(URLPath)) {
+                        if (userdata.value) {
+                            return new Response("username taken", {
+                                status: 400,
+                                headers: { "content-type": "text/html" },
+                            });
+                        }
 
-                        return new Response("username taken", {
-                            status: 400,
-                            headers: { "content-type": "text/html" },
+                        // Successful Signup
+                        kv.set(["userdata", accInfo.username], {
+                            password: accInfo.password,
                         });
+
+                        let cookie = generateCookie();
                     }
                 }
 
-                switch (new URL(request.url).pathname) {
+                return new Response(/* TODO: write this bit */);
+
+                /* switch (new URL(request.url).pathname) {
                     case "/signup/new-account":
                         accInfo = JSON.parse(await request.text());
 
@@ -141,7 +152,7 @@ Deno.serve({
                             });
                         }
 
-                        // TODO: make this work
+                        // Successful Login
                         return new Response(
                             "you logged in successfully!! (login system not fully implemented yet so this means nothing)",
                             {
@@ -154,9 +165,7 @@ Deno.serve({
                         console.log("Unknown POST request\n", request);
 
                         return new Response(/* TODO: write this bit */);
-                }
-
-                return new Response(/* TODO: write this bit */);
+                } */
             } else if (request.method === "GET") {
                 console.log(request);
 
