@@ -195,8 +195,8 @@ Deno.serve({
                     headers: { "content-type": "text/html" },
                 });
             }
-        } catch (_) {
-            new Response({
+        } catch (error) {
+            return new Response(error, {
                 status: 500,
             });
         }
