@@ -4,9 +4,7 @@ function generateCookie() {
     return randomBytes(32).toString("hex");
 }
 
-const kv = await Deno.openKv(
-    "https://api.deno.com/databases/ba2ab28b-6505-49c0-bd37-99e0aa074468/connect"
-);
+const kv = await Deno.openKv();
 
 Deno.serve({
     port: 8000,
@@ -163,8 +161,6 @@ Deno.serve({
 
                     default:
                         console.log("Unknown POST request\n", request);
-
-                        return new Response(/* TODO: write this bit * /);
                 } */
             } else if (request.method === "GET") {
                 console.log(request);
