@@ -163,8 +163,6 @@ Deno.serve({
                         console.log("Unknown POST request\n", request);
                 } */
             } else if (request.method === "GET") {
-                console.log(request);
-
                 const URLPath = new URL(request.url).pathname;
 
                 let filePath;
