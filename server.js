@@ -164,7 +164,7 @@ Deno.serve({
                     default:
                         console.log("Unknown POST request\n", request);
 
-                        return new Response(/* TODO: write this bit */);
+                        return new Response(/* TODO: write this bit * /);
                 } */
             } else if (request.method === "GET") {
                 console.log(request);
