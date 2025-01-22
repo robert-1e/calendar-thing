@@ -1,7 +1,7 @@
-const crypto = require("crypto");
+import { randomBytes } from "crypto";
 
 function generateCookie() {
-    return crypto.randomBytes(32).toString("hex");
+    return randomBytes(32).toString("hex");
 }
 
 const kv = await Deno.openKv();
