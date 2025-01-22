@@ -113,7 +113,7 @@ Deno.serve({
                         break;
 
                     case "/login/login":
-                        accInfo = JSON.parse(await request.text());
+                        let accInfo = JSON.parse(await request.text());
 
                         console.log(accInfo);
 
