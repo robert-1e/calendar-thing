@@ -53,5 +53,6 @@ form.addEventListener("submit", async (event) => {
         });
 
         console.log(response);
+        console.log(await response.text());
     }
 });

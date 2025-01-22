@@ -1,3 +1,9 @@
+const crypto = require("crypto");
+
+function generateCookie() {
+    return crypto.randomBytes(32).toString("hex");
+}
+
 const kv = await Deno.openKv();
 
 Deno.serve({
@@ -102,6 +108,8 @@ Deno.serve({
                             password: accInfo.password,
                         });
 
+                        let cookie = generateCookie();
+
                         break;
 
                     case "/login/login":
@@ -138,16 +146,14 @@ Deno.serve({
                             }
                         );
 
-                        break;
-
                     default:
                         console.log("Unknown POST request\n", request);
 
                         return new Response(/* TODO: write this bit */);
                 }
 
-                return new Response();
-            } else {
+                return new Response(/* TODO: write this bit */);
+            } else if (request.method === "GET") {
                 console.log(request);
 
                 const URLPath = new URL(request.url).pathname;
@@ -183,6 +189,11 @@ Deno.serve({
                 }
 
                 return new Response(file.readable);
+            } else {
+                return new Response("", {
+                    status: 405,
+                    headers: { "content-type": "text/html" },
+                });
             }
         } catch (_) {
             new Response({
