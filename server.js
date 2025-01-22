@@ -41,6 +41,13 @@ Deno.serve({
 
                     userdata = await kv.get(["userdata", accInfo.username]);
 
+                    if (!userdata) {
+                        return new Response("invalid account creation data", {
+                            status: 400,
+                            headers: { "content-type": "text/html" },
+                        });
+                    }
+
                     if (
                         accInfo.username.length < 5 ||
                         18 < accInfo.username.length ||
@@ -88,11 +95,6 @@ Deno.serve({
                             /[^a-zA-Z0-9_]/.test(accInfo.username) ||
                             /^_|_$/.test(accInfo.username)
                         ) {
-                            // Invalid info (deal with it somehow)
-                            console.log(
-                                "FIX ME!1!!!1\n(if this is still WIP)\n[FOR DEBUGGING PURPOSES]"
-                            );
-
                             return new Response("invalid account creation data", {
                                 status: 400,
                                 headers: { "content-type": "text/html" },
