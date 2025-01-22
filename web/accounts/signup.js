@@ -57,11 +57,11 @@ form.addEventListener("submit", async (event) => {
             }),
         });
 
+        let body = response.text();
+
+        console.log(body);
+
         if (response.status === 400) {
-            let body = response.text();
-
-            console.log(body);
-
             if (body === "username taken") {
                 errorMsgP.innerHTML = "Username is taken, try another one.";
             }
