@@ -57,7 +57,7 @@ form.addEventListener("submit", async (event) => {
             }),
         });
 
-        let body = response.text();
+        let body = await response.text();
 
         console.log(body);
 
