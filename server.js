@@ -36,9 +36,9 @@ Deno.serve({
 
                 let accInfo, userdata;
 
-                if (/^\/account\/(login|signup)$/.test(URLPath)) {
-                    console.log(URLPath);
+                console.log(URLPath, "\n", request);
 
+                if (/^\/account\/(login|signup)$/.test(URLPath)) {
                     accInfo = JSON.parse(await request.text());
 
                     userdata = await kv.get(["userdata", accInfo.username]);
