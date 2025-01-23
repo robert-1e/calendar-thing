@@ -40,7 +40,7 @@ form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     if (validateForm()) {
-        let response = await fetch("/login/login", {
+        let response = await fetch("/account/login", {
             method: "POST",
             headers: {
                 "content-type": "application/json",
