@@ -1,13 +1,17 @@
 import { randomBytes } from "node:crypto";
 
-function oven(ingredient) {
-    if (ingredient === "cookie dough") return randomBytes(32).toString("hex");
+// 256 for session ID
+function oven(size) {
+    return randomBytes(size).toString("hex");
 }
 
 const kv = await Deno.openKv();
 
+// "sessionID": "username"
+const sessions = {};
+
 Deno.serve({
-    port: 8000,
+    port: 80,
     handler: async (request) => {
         try {
             if (request.headers.get("upgrade") === "websocket") {
@@ -85,7 +89,7 @@ Deno.serve({
                             password: accInfo.password,
                         });
 
-                        let cookie = oven("cookie dough");
+                        let cookie = oven(256);
 
                         console.log("Ding! ", cookie);
 
@@ -130,7 +134,7 @@ Deno.serve({
                             password: accInfo.password,
                         });
 
-                        let cookie = oven("cookie dough");
+                        let cookie = oven(256);
 
                         break;
 
