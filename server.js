@@ -1,7 +1,7 @@
 import { randomBytes } from "node:crypto";
 
-function generateCookie() {
-    return randomBytes(32).toString("hex");
+function oven(ingredient) {
+    if (ingredient === "cookie dough") return randomBytes(32).toString("hex");
 }
 
 const kv = await Deno.openKv();
@@ -83,7 +83,12 @@ Deno.serve({
                             password: accInfo.password,
                         });
 
-                        let cookie = generateCookie();
+                        let cookie = oven("cookie dough");
+
+                        return new Response(cookie, {
+                            status: 200,
+                            headers: { "content-type": "text/html" },
+                        });
                     }
                 }
 
@@ -121,7 +126,7 @@ Deno.serve({
                             password: accInfo.password,
                         });
 
-                        let cookie = generateCookie();
+                        let cookie = oven("cookie dough");
 
                         break;
 
