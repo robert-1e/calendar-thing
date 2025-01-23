@@ -85,6 +85,8 @@ Deno.serve({
 
                         let cookie = oven("cookie dough");
 
+                        console.log("Ding! ", cookie);
+
                         return new Response(cookie, {
                             status: 200,
                             headers: { "content-type": "text/html" },
