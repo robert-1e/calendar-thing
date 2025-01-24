@@ -1,14 +1,22 @@
-import { randomBytes } from "node:crypto";
+import crypto from "node:crypto";
 
-// 256 for session ID
+// Use 256 for session ID
 function oven(size) {
-    return randomBytes(size).toString("hex");
+    return crypto.randomBytes(size).toString("hex");
+}
+
+// ("sha512", ..., "hex")
+function hash(algorithm, data, digest = "hex") {
+    crypto.createHash(algorithm).update(data).digest(digest);
 }
 
 const kv = await Deno.openKv();
 
-// "sessionID": "username"
-const sessions = {};
+// Remove this next commit
+(async () => {
+    await kv.delete(["userdata", "Annon"]);
+    await kv.delete(["userdata", "Cooked"]);
+})();
 
 Deno.serve({
     port: 80,
@@ -70,7 +78,7 @@ Deno.serve({
                         });
                     } else if (
                         /login/.test(URLPath) &&
-                        userdata.value.password === accInfo.password
+                        userdata.value.password === hash("sha512", accInfo.password)
                     ) {
                         return new Response(JSON.stringify(), {
                             status: 200,
@@ -85,13 +93,22 @@ Deno.serve({
                         }
 
                         // Successful Signup
-                        kv.set(["userdata", accInfo.username], {
-                            password: accInfo.password,
+                        await kv.set(["userdata", accInfo.username], {
+                            password: hash("sha512", accInfo.password),
                         });
 
-                        let cookie = oven(256);
+                        let cookie;
 
-                        console.log("Ding! ", cookie);
+                        while (true) {
+                            cookie = oven(256);
+
+                            if (!(await kv.get(["cookie", cookie]))) break;
+                        }
+
+                        await kv.set(["cookie", cookie], {
+                            username: accInfo.username,
+                            expires: "",
+                        });
 
                         return new Response(cookie, {
                             status: 200,
@@ -101,80 +118,6 @@ Deno.serve({
                 }
 
                 return new Response(/* TODO: write this bit */);
-
-                /* switch (new URL(request.url).pathname) {
-                    case "/signup/new-account":
-                        accInfo = JSON.parse(await request.text());
-
-                        console.log(accInfo);
-
-                        // Validating info server-side (as well as client side)
-                        if (
-                            accInfo.username.length < 5 ||
-                            18 < accInfo.username.length ||
-                            accInfo.password.length < 8 ||
-                            20 < accInfo.password.length ||
-                            /[^a-zA-Z0-9_]/.test(accInfo.username) ||
-                            /^_|_$/.test(accInfo.username)
-                        ) {
-                            return new Response("invalid account creation data", {
-                                status: 400,
-                                headers: { "content-type": "text/html" },
-                            });
-                        } else if ((await kv.get(["userdata", accInfo.username])).value) {
-                            console.log(await kv.get(["userdata", accInfo.username]));
-
-                            return new Response("username taken", {
-                                status: 400,
-                                headers: { "content-type": "text/html" },
-                            });
-                        }
-
-                        kv.set(["userdata", accInfo.username], {
-                            password: accInfo.password,
-                        });
-
-                        let cookie = oven(256);
-
-                        break;
-
-                    case "/login/login":
-                        accInfo = JSON.parse(await request.text());
-
-                        console.log(accInfo);
-
-                        // Validating info server-side (as well as client side)
-                        if (
-                            accInfo.username.length < 5 ||
-                            18 < accInfo.username.length ||
-                            accInfo.password.length < 8 ||
-                            20 < accInfo.password.length ||
-                            /[^a-zA-Z0-9_]/.test(accInfo.username) ||
-                            /^_|_$/.test(accInfo.username) ||
-                            !(
-                                (await kv.get(["userdata", accInfo.username])).value.password ===
-                                accInfo.password
-                            )
-                        ) {
-                            // Invalid info (deal with it somehow)
-                            return new Response("invalid account data", {
-                                status: 400,
-                                headers: { "content-type": "text/html" },
-                            });
-                        }
-
-                        // Successful Login
-                        return new Response(
-                            "you logged in successfully!! (login system not fully implemented yet so this means nothing)",
-                            {
-                                status: 200,
-                                headers: { "content-type": "text/html" },
-                            }
-                        );
-
-                    default:
-                        console.log("Unknown POST request\n", request);
-                } */
             } else if (request.method === "GET") {
                 const URLPath = new URL(request.url).pathname;
 
@@ -215,8 +158,8 @@ Deno.serve({
                     headers: { "content-type": "text/html" },
                 });
             }
-        } catch (error) {
-            return new Response(error, {
+        } catch ({ name, message }) {
+            return new Response(name, {
                 status: 500,
             });
         }

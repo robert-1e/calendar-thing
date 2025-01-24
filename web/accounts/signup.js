@@ -57,9 +57,11 @@ form.addEventListener("submit", async (event) => {
             }),
         });
 
-        let body = await response.text();
+        if (response.status === 200) {
+            let body = await response.text();
 
-        console.log(body);
+            document.cookie;
+        }
 
         if (response.status === 400) {
             if (body === "username taken") {
