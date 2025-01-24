@@ -16,7 +16,9 @@ const kv = await Deno.openKv();
 
 // Remove this next commit
 (async () => {
-    await kv.delete(["userdata", "TestingTesting123"]);
+    for await (const entry of kv.list({})) {
+        await kv.delete(entry.key);
+    }
 })();
 
 // Because I'm too lazy for a better solution
