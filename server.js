@@ -158,7 +158,7 @@ Deno.serve({
                 });
             }
         } catch ({ name, message }) {
-            return new Response(name, {
+            return new Response(name + message, {
                 status: 500,
             });
         }
