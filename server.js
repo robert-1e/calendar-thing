@@ -90,11 +90,11 @@ Deno.serve({
                         }
 
                         // Successful Signup
-                        await kv.set(["userdata", accInfo.username], {
+                        let res = await kv.set(["userdata", accInfo.username], {
                             password: hash("sha512", accInfo.password),
                         });
 
-                        console.log(hash("sha512", accInfo.password));
+                        console.log(`Hash: ${hash("sha512", accInfo.password)}\nRes: ${res}`);
 
                         let cookie = oven(256);
 
@@ -102,7 +102,7 @@ Deno.serve({
                             cookie = oven(256);
                         }
 
-                        let res = await kv.set(["cookie", cookie], {
+                        res = await kv.set(["cookie", cookie], {
                             username: accInfo.username,
                             expires: "",
                         });
