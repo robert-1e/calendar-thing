@@ -7,7 +7,7 @@ function oven(size) {
 
 // ("sha512", ..., "hex")
 function hash(algorithm, data, digest = "hex") {
-    crypto.createHash(algorithm).update(data).digest(digest);
+    return crypto.createHash(algorithm).update(data).digest(digest);
 }
 
 const kv = await Deno.openKv();
