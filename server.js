@@ -96,18 +96,18 @@ Deno.serve({
 
                         console.log(hash("sha512", accInfo.password));
 
-                        let cookie;
+                        let cookie = oven(256);
 
-                        while (true) {
+                        while (await kv.get(["cookie", cookie])) {
                             cookie = oven(256);
-
-                            if (!(await kv.get(["cookie", cookie]))) break;
                         }
 
                         await kv.set(["cookie", cookie], {
                             username: accInfo.username,
                             expires: "",
                         });
+
+                        console.log(cookie);
 
                         return new Response(cookie, {
                             status: 200,
