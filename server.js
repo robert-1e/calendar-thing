@@ -47,8 +47,6 @@ Deno.serve({
 
                 let accInfo, userdata;
 
-                console.log(URLPath, "\n", request);
-
                 if (/^\/account\/(login|signup)$/.test(URLPath)) {
                     accInfo = JSON.parse(await request.text());
 
@@ -95,6 +93,8 @@ Deno.serve({
                         await kv.set(["userdata", accInfo.username], {
                             password: hash("sha512", accInfo.password),
                         });
+
+                        console.log(hash("sha512", accInfo.password));
 
                         let cookie;
 
