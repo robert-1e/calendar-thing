@@ -77,7 +77,7 @@ Deno.serve({
                         /login/.test(URLPath) &&
                         userdata.value.password === hash("sha512", accInfo.password)
                     ) {
-                        return new Response(JSON.stringify(), {
+                        return new Response(JSON.stringify(accInfo), {
                             status: 200,
                             headers: { "content-type": "application/json" },
                         });
