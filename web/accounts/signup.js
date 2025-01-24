@@ -49,7 +49,6 @@ form.addEventListener("submit", async (event) => {
             method: "POST",
             headers: {
                 "content-type": "application/json",
-                "testing-api-key": "top-secret-123",
             },
             body: JSON.stringify({
                 username: nameInp.value,
