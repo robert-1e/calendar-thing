@@ -102,12 +102,12 @@ Deno.serve({
                             cookie = oven(256);
                         }
 
-                        await kv.set(["cookie", cookie], {
+                        let res = await kv.set(["cookie", cookie], {
                             username: accInfo.username,
                             expires: "",
                         });
 
-                        console.log(cookie);
+                        console.log(`Cookie: ${cookie}\nRes: ${res}`);
 
                         return new Response(cookie, {
                             status: 200,
