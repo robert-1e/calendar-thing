@@ -94,11 +94,11 @@ Deno.serve({
                             password: hash("sha512", accInfo.password),
                         });
 
-                        console.log(`Hash: ${hash("sha512", accInfo.password)}\nRes: ${res}`);
+                        console.log(`Hash: ${hash("sha512", accInfo.password)}\nRes: `, res);
 
                         let cookie = oven(256);
 
-                        while (await kv.get(["cookie", cookie])) {
+                        while ((await kv.get(["cookie", cookie])).value) {
                             cookie = oven(256);
                         }
 
