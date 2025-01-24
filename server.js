@@ -16,7 +16,7 @@ const kv = await Deno.openKv();
 
 // Remove this next commit
 (async () => {
-    for await (const entry of kv.list({})) {
+    for await (const entry of kv.list({ prefix: ["cookie"] })) {
         await kv.delete(entry.key);
     }
 })();
