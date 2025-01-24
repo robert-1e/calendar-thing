@@ -14,8 +14,7 @@ const kv = await Deno.openKv();
 
 // Remove this next commit
 (async () => {
-    await kv.delete(["userdata", "Annon"]);
-    await kv.delete(["userdata", "Cooked"]);
+    await kv.delete(["userdata", "TestingTesting123"]);
 })();
 
 Deno.serve({
