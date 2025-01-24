@@ -58,6 +58,8 @@ form.addEventListener("submit", async (event) => {
 
         let body = await response.text();
 
+        console.log(body);
+
         if (response.status === 200) {
             document.cookie;
         }
