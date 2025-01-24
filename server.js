@@ -107,7 +107,7 @@ Deno.serve({
                             expires: "",
                         });
 
-                        console.log(`Cookie: ${cookie}\nRes: ${res}`);
+                        console.log(`Cookie: ${cookie}\nRes: `, res);
 
                         return new Response(cookie, {
                             status: 200,
