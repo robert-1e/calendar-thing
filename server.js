@@ -10,12 +10,17 @@ function hash(algorithm, data, digest = "hex") {
     return crypto.createHash(algorithm).update(data).digest(digest);
 }
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
 const kv = await Deno.openKv();
 
 // Remove this next commit
 (async () => {
     await kv.delete(["userdata", "TestingTesting123"]);
 })();
+
+// Because I'm too lazy for a better solution
+let dealingWithPOST = false;
 
 Deno.serve({
     port: 80,
@@ -43,6 +48,11 @@ Deno.serve({
 
                 return response;
             } else if (request.method === "POST") {
+                while (dealingWithPOST) {
+                    sleep(100);
+                }
+
+                dealingWithPOST = true;
                 const URLPath = new URL(request.url).pathname;
 
                 let accInfo, userdata;
@@ -53,6 +63,7 @@ Deno.serve({
                     userdata = await kv.get(["userdata", accInfo.username]);
 
                     if (!userdata) {
+                        dealingWithPOST = false;
                         return new Response("invalid account creation data", {
                             status: 400,
                             headers: { "content-type": "text/html" },
@@ -68,7 +79,7 @@ Deno.serve({
                         /^_|_$/.test(accInfo.username)
                     ) {
                         // Invalid info
-
+                        dealingWithPOST = false;
                         return new Response("invalid account creation data", {
                             status: 400,
                             headers: { "content-type": "text/html" },
@@ -77,12 +88,14 @@ Deno.serve({
                         /login/.test(URLPath) &&
                         userdata.value.password === hash("sha512", accInfo.password)
                     ) {
+                        dealingWithPOST = false;
                         return new Response(JSON.stringify(userdata), {
                             status: 200,
                             headers: { "content-type": "application/json" },
                         });
                     } else if (/signup/.test(URLPath)) {
                         if (userdata.value) {
+                            dealingWithPOST = false;
                             return new Response("username taken", {
                                 status: 400,
                                 headers: { "content-type": "text/html" },
@@ -109,6 +122,7 @@ Deno.serve({
 
                         console.log(`Cookie: ${cookie}\nRes: `, res);
 
+                        dealingWithPOST = false;
                         return new Response(cookie, {
                             status: 200,
                             headers: { "content-type": "text/html" },
@@ -116,6 +130,7 @@ Deno.serve({
                     }
                 }
 
+                dealingWithPOST = false;
                 return new Response(/* TODO: write this bit */);
             } else if (request.method === "GET") {
                 const URLPath = new URL(request.url).pathname;
@@ -158,6 +173,7 @@ Deno.serve({
                 });
             }
         } catch ({ name, message }) {
+            if (request.method === "POST") dealingWithPOST = false;
             return new Response(name + message, {
                 status: 500,
             });
