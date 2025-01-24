@@ -19,6 +19,10 @@ const kv = await Deno.openKv();
     for await (const entry of kv.list({ prefix: ["cookie"] })) {
         await kv.delete(entry.key);
     }
+
+    for await (const entry of kv.list({ prefix: ["userdata"] })) {
+        await kv.delete(entry.key);
+    }
 })();
 
 // Because I'm too lazy for a better solution
