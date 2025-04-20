@@ -61,7 +61,8 @@ form.addEventListener("submit", async (event) => {
         console.log(body);
 
         if (response.status === 200) {
-            document.cookie;
+            document.cookie = `sessionID=${body};expires=; path=/`;
+            cookie.set
         }
 
         if (response.status === 400) {

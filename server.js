@@ -5,12 +5,31 @@ function oven(size) {
     return crypto.randomBytes(size).toString("hex");
 }
 
-// ("sha512", ..., "hex")
+/**
+ * Hashes some data
+ * @param {String} algorithm Hashing algorithm used
+ * @param {String} data Data that is being hashed
+ * @param {Number} digest Format that the returned hash is in
+ * @returns Hashed data
+ */
 function hash(algorithm, data, digest = "hex") {
     return crypto.createHash(algorithm).update(data).digest(digest);
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Makes a string that can be directly stored as a cookie on client
+ * @param {String} name Name of cookie
+ * @param {String} value Value of cookie
+ * @param {Number} expiresIn Days until cookie expires
+ * @returns String containing all cookie data
+ */
+function formatCookie(name, value, expiresIn) {
+    const d = new Date();
+    d.setTime(d.getTime() + expiresIn * 24 * 60 * 60 * 1000);
+    return name + "=" + value + ";" + "expires=" + d.toUTCString() + ";path=/";
+}
 
 const kv = await Deno.openKv();
 
@@ -129,7 +148,7 @@ Deno.serve({
                         console.log(`Cookie: ${cookie}\nRes: `, res);
 
                         dealingWithPOST = false;
-                        return new Response(cookie, {
+                        return new Response(formatCookie("sessionID", cookie, 30), {
                             status: 200,
                             headers: { "content-type": "text/html" },
                         });
